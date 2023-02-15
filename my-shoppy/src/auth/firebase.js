@@ -15,28 +15,15 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider(); 
 
 export async function login() { 
-  //return이 없었는데 어떻게 실행이 된거지? 아... useEffect에서 실행됐나보다
-  return signInWithPopup(auth, provider)
-      .then((result) => {
-        const credential = GoogleAuthProvider.credentialFromResult(result);
-        const token = credential.accessToken;
-        console.log("token", token);
-        
-        return result.user;        
-      }).catch((error) => {
-        throw new Error(`login error : ${error}`)
-      });
-  }
+  return signInWithPopup(auth, provider).catch(console.error);
+}
 
-  export function getUserState(callback) {
-    onAuthStateChanged(auth, callback);
+export function getUserState(callback) {
+  onAuthStateChanged(auth, (user) => {
+    callback(user);
+  });
 }
 
 export async function logout() {
-  return signOut(auth).then(() => {
-      return null;
-    }).catch((error) => {
-      throw new Error(`logout error: ${error}`)
-    });
-  }
-export {auth};
+  return signOut(auth).catch(console.error);
+}

@@ -8,24 +8,10 @@ export default function Header() {
   const [user, setUser] = useState(null); 
   const [isAdmin, setIsAdmin] = useState(false);
 
-  const handleLogin = () => {
-    login().then((user) => {
-      setUser(user);
-      if(user.uid === "V9lWvlYTvVhFWCxezGb9tKuJlbz1"){
-        setIsAdmin(true);
-      }
-    });
-  }
-
-  const handleLogout = () => {
-    logout().then(() => {
-      setUser(null);
-      setIsAdmin(false);
-    });
-  }
-
   useEffect(() => {
-    getUserState((user) => {setUser(user)});
+    //엥??? 너 처음 뜰때만 실행되는거 아냐???????
+    console.log('언제 실행되니?');
+    getUserState(setUser);
   }, []);
 
   console.log('user state', user);
@@ -40,6 +26,7 @@ export default function Header() {
         <Link to="products">Products</Link>
         {user && <Link to="/cart">Carts</Link>}
         {isAdmin && <Link to="products/new"><BsFillPencilFill/></Link>}
+        {/* //TODO: 컴포넌트로 뺴기, 화면 작아질경우 userName나오지 않도록 */}
         {user && 
         <div className='flex items-center'>
           <img 
@@ -53,10 +40,10 @@ export default function Header() {
         }
         {!user && <button 
           className='bg-main text-white px-2'
-          onClick={handleLogin}>Login</button>}
+          onClick={login}>Login</button>}
         {user && <button 
         className='bg-main text-white px-2'
-        onClick={handleLogout}>Logout</button>}
+        onClick={logout}>Logout</button>}
       </div>
     </header>
   );
