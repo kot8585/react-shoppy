@@ -1,19 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { TbBuildingStore } from 'react-icons/tb';
-import { AiOutlineShoppingCart } from 'react-icons/ai';
+import { BsFillPencilFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { login, logout, getUserState } from '../auth/firebase';
 
 export default function Header() {
   const [user, setUser] = useState(null); 
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  const handleClick = () => {
-    if(!user){
-      login().then((user) => setUser(user));
-    } else {
-      logout().then(() => setUser(null));
-      console.log('로그아웃 되었음')
-    }
+  const handleLogin = () => {
+    login().then((user) => {
+      setUser(user);
+      if(user.uid === "V9lWvlYTvVhFWCxezGb9tKuJlbz1"){
+        setIsAdmin(true);
+      }
+    });
+  }
+
+  const handleLogout = () => {
+    logout().then(() => {
+      setUser(null);
+      setIsAdmin(false);
+    });
   }
 
   useEffect(() => {
@@ -29,9 +37,9 @@ export default function Header() {
         <span>Shoppy</span>
       </Link>
       <div className='flex items-center gap-2'>
-        <Link to="products">products</Link>
-        {/* TODO: 로그인 되어있지 않을경우 redirect 하기 */}
-        <AiOutlineShoppingCart /> 
+        <Link to="products">Products</Link>
+        {user && <Link to="/cart">Carts</Link>}
+        {isAdmin && <Link to="products/new"><BsFillPencilFill/></Link>}
         {user && 
         <div className='flex items-center'>
           <img 
@@ -43,10 +51,12 @@ export default function Header() {
             <span className='text-sm'>{user.displayName}</span>
         </div>
         }
-        <button 
+        {!user && <button 
           className='bg-main text-white px-2'
-          onClick={handleClick}
-        >{user ? 'Logout' : 'Login'}</button>
+          onClick={handleLogin}>Login</button>}
+        {user && <button 
+        className='bg-main text-white px-2'
+        onClick={handleLogout}>Logout</button>}
       </div>
     </header>
   );

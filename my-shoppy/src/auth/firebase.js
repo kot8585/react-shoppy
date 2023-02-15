@@ -15,7 +15,8 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider(); 
 
 export async function login() { 
-    signInWithPopup(auth, provider)
+  //return이 없었는데 어떻게 실행이 된거지? 아... useEffect에서 실행됐나보다
+  return signInWithPopup(auth, provider)
       .then((result) => {
         const credential = GoogleAuthProvider.credentialFromResult(result);
         const token = credential.accessToken;
@@ -32,7 +33,7 @@ export async function login() {
 }
 
 export async function logout() {
-  signOut(auth).then(() => {
+  return signOut(auth).then(() => {
       return null;
     }).catch((error) => {
       throw new Error(`logout error: ${error}`)
