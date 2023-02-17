@@ -42,39 +42,27 @@ export default function AddProduct() {
   }
 
   const handleSubmit = async (e) => {
+    try{
     const submitProduct = {...product};
     setDisabled(true);
     e.preventDefault();
-    console.log('submit 됌');
-    //1. product 객체 만들기 
-    //2. product 객체에서 validation 체크하기 
+    
     if(!validateProduct(submitProduct)){
       setDisabled(false);
       return;
     };
     //3. ✅ 전부 다 체크됐을경우 cloudinary에 요청 보내기 
-    uploadImage()
-    .then((data) => {
-      
-      console.log('imageUrl', data.url);
-      submitProduct.imageUrl = data.url;
-      return submitProduct;
-    })
-    .then((product) => {
-      submitProduct.id = uuidv4();
-      writeProductData(product);
-    })
-    .then(() => {
-      setCompleted(true);
-      setProduct({
-        imageUrl: "",
-        name: "",
-        price: "",
-        category: "",
-        description: "",
-        option: "",
-      });
-    }).finally(() => setDisabled(false));
+    const data = await uploadImage(submitProduct.imageUrl);
+    submitProduct.imageUrl = data.url;
+    submitProduct.id = uuidv4();
+    submitProduct.option = submitProduct.option.split(',');
+    await writeProductData(submitProduct);
+
+    setCompleted(true);
+  } finally{
+    setDisabled(false);
+  }
+
   }
 
   useEffect(() => {
@@ -85,31 +73,6 @@ export default function AddProduct() {
     }
   }, [completed]);
 
-  async function uploadImage() {
-    const cloudName = 'dxy2ifpy4';
-    const resourceType = 'image'; 
-    const uploadPreset = 'cvei2irj';
-    const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
-
-    const formData = new FormData();
-    formData.append('file', product.imageUrl);
-    formData.append("upload_preset", uploadPreset);
-
-    return fetch(url, {
-      method: 'POST',
-      body: formData
-    })
-    .then((response) => {
-        return response.text();
-      })
-      .then((data) => {
-        return JSON.parse(data);
-      })
-      .catch((error) => console.error(error));
-  }
-
-  
-
   return (
     <main>
       <h1>새로운 제품 등록</h1>
@@ -117,7 +80,7 @@ export default function AddProduct() {
       <form className='flex flex-col' onSubmit={handleSubmit} >
         {product.imageUrl && <img className='w-16 h-16' src={product.imageUrl && URL.createObjectURL(product.imageUrl)} alt="제품사진"></img>}
         <input type="file" name='imageUrl' onChange={handleFileChange}/>
-        <input type="text" name="name" placeholder='제품명' value={product.name} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input type="text" name="name" placeholder='제품명' min='0' value={product.name} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input type="number" name="price" placeholder='가격' value={product.price} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input type="text" name="category" placeholder='카테고리' value={product.category} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input type="text" name="description" placeholder='제품 설명' value={product.description} onChange={e => handleChange(e.target.name, e.target.value)} required/>
@@ -155,3 +118,26 @@ function validateProduct(product){
     }
     return true;
     }
+
+async function uploadImage(imageUrl) {
+  const cloudName = 'dxy2ifpy4';
+  const resourceType = 'image'; 
+  const uploadPreset = 'cvei2irj';
+  const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
+
+  const formData = new FormData();
+  formData.append('file', imageUrl);
+  formData.append("upload_preset", uploadPreset);
+
+  return fetch(url, {
+    method: 'POST',
+    body: formData
+  })
+  .then((response) => {
+      return response.text();
+    })
+    .then((data) => {
+      return JSON.parse(data);
+    })
+    .catch((error) => console.error(error));
+}

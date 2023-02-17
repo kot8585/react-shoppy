@@ -16,7 +16,7 @@ export function checkIsAdmin (user) {
     });
 }
 
-export function writeProductData(product) {
+export async function writeProductData(product) {
   const db = getDatabase();
-  set(ref(db, 'products/'+product.id), product);
+  return set(ref(db, 'products/'+product.id), product);
 }
