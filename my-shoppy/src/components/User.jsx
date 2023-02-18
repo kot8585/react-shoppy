@@ -13,7 +13,7 @@ export default function User({user: {isAdmin, photoURL, displayName}}) {
           alt='프로필 이미지'
           referrerPolicy='no-referrer'
           />
-          <span className='text-sm ml-1'>{displayName}</span>
+          <span className='text-sm ml-1 hidden sm:inline-block'>{displayName}</span>
       </div>
     </>
   );
