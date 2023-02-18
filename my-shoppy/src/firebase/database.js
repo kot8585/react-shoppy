@@ -16,6 +16,18 @@ export function checkIsAdmin (user) {
     });
 }
 
+export async function getData(callback) {
+  return get(child(dbRef, `products/`)).then((snapshot) => {
+    if (snapshot.exists()) {
+        callback(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+}
+
 export async function writeProductData(product) {
   const db = getDatabase();
   return set(ref(db, 'products/'+product.id), product);

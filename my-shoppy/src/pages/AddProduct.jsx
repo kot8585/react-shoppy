@@ -129,6 +129,7 @@ async function uploadImage(imageUrl) {
   formData.append('file', imageUrl);
   formData.append("upload_preset", uploadPreset);
 
+  //TODO: axios로 바꾸기
   return fetch(url, {
     method: 'POST',
     body: formData
