@@ -3,6 +3,7 @@ import { writeProductData } from '../firebase/database';
 import {v4 as uuidv4} from 'uuid';
 import { UserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'
 
 //TODO: product를 객채로 관리하는 방법은 없으려나? 
 export default function AddProduct() {
@@ -42,23 +43,24 @@ export default function AddProduct() {
   }
 
   const handleSubmit = async (e) => {
-    try{
-    const submitProduct = {...product};
+    try {
     setDisabled(true);
     e.preventDefault();
     
-    if(!validateProduct(submitProduct)){
+    if(!validateProduct(product)){
       setDisabled(false);
       return;
     };
     //3. ✅ 전부 다 체크됐을경우 cloudinary에 요청 보내기 
-    const data = await uploadImage(submitProduct.imageUrl);
-    submitProduct.imageUrl = data.url;
-    submitProduct.id = uuidv4();
-    submitProduct.option = submitProduct.option.split(',');
-    await writeProductData(submitProduct);
+    
+    const data = await uploadImage(product.imageUrl);
 
+    const submitProduct = changeToSubmitProduct(product, data.url);
+    await writeProductData(submitProduct);
     setCompleted(true);
+    window.alert('제품 업로드 완료');
+  } catch (e){
+    console.log('error 발생!', e);
   } finally{
     setDisabled(false);
   }
@@ -78,7 +80,7 @@ export default function AddProduct() {
       <h1 className='text-center p-2 text-xl font-bold'>새로운 제품 등록</h1>
       <div className={`p-2 text-zinc-400 text-center ${completed? "visible" : "hidden"}`}>✅ 새로운 제품이 등록되었습니다.</div>
       <form className='flex flex-col gap-2 px-4 py-2' onSubmit={handleSubmit} >
-        {product.imageUrl && <img className='w-16 h-16' src={product.imageUrl && URL.createObjectURL(product.imageUrl)} alt="제품사진"></img>}
+        {product.imageUrl && <img className='w-1/6 h-1/3 mx-auto' src={product.imageUrl && URL.createObjectURL(product.imageUrl)} alt="제품사진"></img>}
         <input className='border border-gray p-3' type="file" name='imageUrl' onChange={handleFileChange}/>
         <input className='border border-gray p-3' type="text" name="name" placeholder='제품명' min='0' value={product.name} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input className='border border-gray p-3' type="number" name="price" placeholder='가격' value={product.price} onChange={e => handleChange(e.target.name, e.target.value)} required/>
@@ -129,16 +131,17 @@ async function uploadImage(imageUrl) {
   formData.append('file', imageUrl);
   formData.append("upload_preset", uploadPreset);
 
-  //TODO: axios로 바꾸기
-  return fetch(url, {
-    method: 'POST',
-    body: formData
-  })
+  return axios.post(url, formData)
   .then((response) => {
-      return response.text();
+      return response.data;
     })
-    .then((data) => {
-      return JSON.parse(data);
-    })
-    .catch((error) => console.error(error));
+  .catch((error) => console.error(error));
+}
+
+function changeToSubmitProduct(product, url) {
+    return {...product, 
+      imageUrl: url, 
+      id: uuidv4(),
+      option: product.option.split(',')
+    };
 }

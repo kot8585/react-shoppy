@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getData } from '../firebase/database';
 
 export default function Products() {
+  //❗️useState에 getData넣어주기,,,?
   const [products, setProducts] = useState();
 
   useEffect(() => {
@@ -18,7 +19,7 @@ export default function Products() {
           src={product.imageUrl} 
           alt='상품 사진'/>
         <div className='flex justify-between p-2'>
-          <div className='flex flex-col'>
+        <div className='flex flex-col'>
             <span>예쁜 드레스</span>
             <span className='text-zinc-400 text-sm'>여성</span>
           </div>
