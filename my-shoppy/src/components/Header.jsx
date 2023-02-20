@@ -4,6 +4,7 @@ import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import User from './User';
 import { UserContext, useUserContext } from '../context/UserContext';
+import Button from './ui/Button';
 
 export default function Header() {
   const {user, login, logout} = useUserContext();
@@ -18,12 +19,8 @@ export default function Header() {
         <Link to="products">Products</Link>
         {<Link to="/cart"><AiOutlineShoppingCart className='text-xl'/></Link>}
         {user && <User user={user}/>}
-        {!user && <button 
-          className='bg-main text-white text-lg px-2 py-1'
-          onClick={login}>Login</button>}
-        {user && <button 
-        className='bg-main text-white text-lg px-2 py-1'
-        onClick={logout}>Logout</button>}
+        {!user && <Button onClick={login} text="Login"/>}
+        {user && <Button onClick={logout} text="Logout"/>}
       </div>
     </header>
   );
