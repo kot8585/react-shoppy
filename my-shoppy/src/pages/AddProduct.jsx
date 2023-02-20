@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { writeProductData } from '../api/database';
-import { useUserContext } from '../context/UserContext';
-import { useNavigate } from 'react-router-dom';
 import { uploadImage } from '../api/uploader';
 
 
 //TODO: product를 객채로 관리하는 방법은 없으려나? 
 export default function AddProduct() {
-  const {user} = useUserContext();
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if(!user) {
-      navigate("/");
-    }
-  },[])
-
   const [disabled, setDisabled] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [product, setProduct] = useState({});
@@ -86,7 +75,7 @@ export default function AddProduct() {
         <input className='border border-gray p-3' type="text" name="category" placeholder='카테고리' value={product.category ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input className='border border-gray p-3' type="text" name="description" placeholder='제품 설명' value={product.description ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input className='border border-gray p-3' type="text" name="option" placeholder='옵션들(콤마(,)로 구분)' value={product.option ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
-        <button className='bg-main text-white p-3 font-bold text-lg' type='submit' disabled={disabled}>제품 등록하기</button>
+        <button className='bg-main text-white p-3 font-bold text-lg' type='submit' disabled={disabled}>{disabled ? '업로드 중...' : '제품 등록하기'}</button>
       </form>
     </main>
   );

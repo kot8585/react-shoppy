@@ -30,7 +30,11 @@ const router = createBrowserRouter([
         ),
        },
       { path: "products/:productId", element: <ProductDetail />},
-      { path: "cart", element: <ProtectedRoute><Cart /></ProtectedRoute>},
+      { path: "cart", element: (
+        <ProtectedRoute>
+        <Cart />
+        </ProtectedRoute>
+        )},
     ]
   }
 ])

@@ -1,8 +1,5 @@
 import { getDatabase, ref, child, get, set } from "firebase/database";
-import { app } from "./config";
 import {v4 as uuidv4} from 'uuid';
-
-const database = getDatabase(app);
 
 const dbRef = ref(getDatabase());
 export function checkIsAdmin (user) {

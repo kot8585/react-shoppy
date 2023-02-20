@@ -1,9 +1,9 @@
-import React, { useContext} from 'react';
+import React from 'react';
 import { TbBuildingStore } from 'react-icons/tb';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import User from './User';
-import { UserContext, useUserContext } from '../context/UserContext';
+import { useUserContext } from '../context/UserContext';
 import Button from './ui/Button';
 
 export default function Header() {
