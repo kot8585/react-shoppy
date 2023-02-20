@@ -6,7 +6,7 @@ export default function User({user: {isAdmin, photoURL, displayName}}) {
   return (
     <>
       {isAdmin && <Link to="products/new"><BsFillPencilFill className='ml-2'/></Link>}
-      <div className='flex items-center'>
+      <div className='flex items-center shrink-0'>
         <img 
           className='w-7 h-7 rounded-full' 
           src={photoURL}

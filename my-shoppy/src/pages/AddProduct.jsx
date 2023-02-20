@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { writeProductData } from '../firebase/database';
-import {v4 as uuidv4} from 'uuid';
+import { writeProductData } from '../api/database';
 import { useUserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios'
+import { uploadImage } from '../api/uploader';
+
 
 //TODO: product를 객채로 관리하는 방법은 없으려나? 
 export default function AddProduct() {
@@ -21,23 +21,21 @@ export default function AddProduct() {
   const [product, setProduct] = useState({});
 
   const handleChange = (name, value) => {
-    if(name === 'file') {
-      setFile(value);
-      return;
-    }
     setProduct((prev) => {
       return {...prev, [name]: value}
     })
   }
 
-  function setFile(files) {
+  const handleFileChange = (e) => {
     setProduct((prev) => {
-      if(!files || files.length === 0) {
-        return {...prev, imageUrl: null}
-      }
-      return {...prev, imageUrl: files[0]}
+      if(!e.target.files || e.target.files.length === 0) {
+          return {...prev, imageUrl: null}
+        }
+      return {...prev, imageUrl: e.target.files[0]};
     });
   }
+ 
+
 
   const handleSubmit = async (e) => {
     try {
@@ -52,8 +50,7 @@ export default function AddProduct() {
     
     const data = await uploadImage(product.imageUrl);
 
-    const submitProduct = changeToSubmitProduct(product, data.url);
-    await writeProductData(submitProduct);
+    await writeProductData(product, data.url);
     setCompleted(true);
     window.alert('제품 업로드 완료');
   } catch (e){
@@ -77,8 +74,13 @@ export default function AddProduct() {
       <h1 className='text-center p-2 text-xl font-bold'>새로운 제품 등록</h1>
       <div className={`p-2 text-zinc-400 text-center ${completed? "visible" : "hidden"}`}>✅ 새로운 제품이 등록되었습니다.</div>
       <form className='flex flex-col gap-2 px-4 py-2' onSubmit={handleSubmit} >
-        {product.imageUrl && <img className='w-1/6 h-1/3 mx-auto' src={product.imageUrl && URL.createObjectURL(product.imageUrl)} alt="제품사진"></img>}
-        <input className='border border-gray p-3' type="file" name='imageUrl' accept='image/*' required onChange={e => handleChange(e.target.name, e.target.files)}/>
+        {product?.imageUrl && 
+        (<img 
+          className='w-1/6 h-1/3 mx-auto' 
+          src={URL.createObjectURL(product.imageUrl)} 
+          alt="제품사진"/>
+        )}
+        <input className='border border-gray p-3' type="file" name='imageUrl' accept='image/*' required onChange={handleFileChange}/>
         <input className='border border-gray p-3' type="text" name="name" placeholder='제품명' min='0' value={product.name ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input className='border border-gray p-3' type="number" name="price" placeholder='가격' value={product.price ?? 0} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <input className='border border-gray p-3' type="text" name="category" placeholder='카테고리' value={product.category ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
@@ -118,27 +120,4 @@ function validateProduct(product){
     return true;
     }
 
-async function uploadImage(imageUrl) {
-  const cloudName = 'dxy2ifpy4';
-  const resourceType = 'image'; 
-  const uploadPreset = 'cvei2irj';
-  const url = `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`;
 
-  const formData = new FormData();
-  formData.append('file', imageUrl);
-  formData.append("upload_preset", uploadPreset);
-
-  return axios.post(url, formData)
-  .then((response) => {
-      return response.data;
-    })
-  .catch((error) => console.error(error));
-}
-
-function changeToSubmitProduct(product, url) {
-    return {...product, 
-      imageUrl: url, 
-      id: uuidv4(),
-      option: product.option.split(',')
-    };
-}

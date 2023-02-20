@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getData } from '../firebase/database';
+import { getData } from '../api/database';
 
 export default function Products() {
   //❗️useState에 getData넣어주기,,,?
