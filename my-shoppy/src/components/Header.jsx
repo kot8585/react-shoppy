@@ -1,17 +1,12 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext} from 'react';
 import { TbBuildingStore } from 'react-icons/tb';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
-import { login, logout, getUserState } from '../firebase/auth';
 import User from './User';
-import { UserContext } from '../context/UserContext';
+import { UserContext, useUserContext } from '../context/UserContext';
 
 export default function Header() {
-  const {user, setUser} = useContext(UserContext); 
-
-  useEffect(() => {
-    getUserState(setUser);
-  }, []);
+  const {user, login, logout} = useUserContext();
 
   return (
     <header className='flex justify-between items-center border-b border-gray p-3 mb-2'>

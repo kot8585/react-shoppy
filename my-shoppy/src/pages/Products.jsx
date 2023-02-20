@@ -9,7 +9,6 @@ export default function Products() {
     getData(setProducts);
   }, []) 
 
-  console.log(products); 
   return (
     <ul className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-5 p-5'>
       {products && Object.values(products).map((product) => {

@@ -1,13 +1,13 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { writeProductData } from '../firebase/database';
 import {v4 as uuidv4} from 'uuid';
-import { UserContext } from '../context/UserContext';
+import { useUserContext } from '../context/UserContext';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios'
 
 //TODO: product를 객채로 관리하는 방법은 없으려나? 
 export default function AddProduct() {
-  const {user} = useContext(UserContext);
+  const {user} = useUserContext();
   const navigate = useNavigate();
 
   useEffect(() => {

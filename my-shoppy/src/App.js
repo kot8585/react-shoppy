@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Outlet } from 'react-router-dom';
 import Header from './components/Header';
-import { UserContext } from './context/UserContext';
+import { UserContextProvider } from './context/UserContext';
 
 export default function App() {
-  const [user, setUser] = useState(null);
-
   return (
-    <UserContext.Provider value={{user, setUser}}>
+    <UserContextProvider>
       <Header />
       <Outlet />
-    </UserContext.Provider>
+    </UserContextProvider>
   );
 }
 

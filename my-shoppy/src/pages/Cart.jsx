@@ -1,9 +1,9 @@
-import React, { useContext, useEffect } from 'react';
-import { redirect, useNavigate } from 'react-router-dom';
-import { UserContext } from '../context/UserContext';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useUserContext } from '../context/UserContext';
 
 export default function Cart() {
-  const {user} = useContext(UserContext);
+  const {user} = useUserContext;
   const navigate = useNavigate();
 
   //TODO: 로그인하고 나서 새로고침 하면 안됌 
