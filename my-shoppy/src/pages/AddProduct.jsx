@@ -18,27 +18,24 @@ export default function AddProduct() {
 
   const [disabled, setDisabled] = useState(false);
   const [completed, setCompleted] = useState(false);
-  const [product, setProduct] = useState({
-    imageUrl: "",
-    name: "",
-    price: "",
-    category: "",
-    description: "",
-    option: "",
-  });
+  const [product, setProduct] = useState({});
 
   const handleChange = (name, value) => {
+    if(name === 'file') {
+      setFile(value);
+      return;
+    }
     setProduct((prev) => {
       return {...prev, [name]: value}
     })
   }
 
-  const handleFileChange = (e) => {
+  function setFile(files) {
     setProduct((prev) => {
-      if(!e.target.files || e.target.files.length === 0) {
+      if(!files || files.length === 0) {
         return {...prev, imageUrl: null}
       }
-      return {...prev, imageUrl: e.target.files[0]}
+      return {...prev, imageUrl: files[0]}
     });
   }
 
@@ -81,12 +78,12 @@ export default function AddProduct() {
       <div className={`p-2 text-zinc-400 text-center ${completed? "visible" : "hidden"}`}>✅ 새로운 제품이 등록되었습니다.</div>
       <form className='flex flex-col gap-2 px-4 py-2' onSubmit={handleSubmit} >
         {product.imageUrl && <img className='w-1/6 h-1/3 mx-auto' src={product.imageUrl && URL.createObjectURL(product.imageUrl)} alt="제품사진"></img>}
-        <input className='border border-gray p-3' type="file" name='imageUrl' onChange={handleFileChange}/>
-        <input className='border border-gray p-3' type="text" name="name" placeholder='제품명' min='0' value={product.name} onChange={e => handleChange(e.target.name, e.target.value)} required/>
-        <input className='border border-gray p-3' type="number" name="price" placeholder='가격' value={product.price} onChange={e => handleChange(e.target.name, e.target.value)} required/>
-        <input className='border border-gray p-3' type="text" name="category" placeholder='카테고리' value={product.category} onChange={e => handleChange(e.target.name, e.target.value)} required/>
-        <input className='border border-gray p-3' type="text" name="description" placeholder='제품 설명' value={product.description} onChange={e => handleChange(e.target.name, e.target.value)} required/>
-        <input className='border border-gray p-3' type="text" name="option" placeholder='옵션들(콤마(,)로 구분)' value={product.option} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input className='border border-gray p-3' type="file" name='imageUrl' accept='image/*' required onChange={e => handleChange(e.target.name, e.target.files)}/>
+        <input className='border border-gray p-3' type="text" name="name" placeholder='제품명' min='0' value={product.name ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input className='border border-gray p-3' type="number" name="price" placeholder='가격' value={product.price ?? 0} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input className='border border-gray p-3' type="text" name="category" placeholder='카테고리' value={product.category ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input className='border border-gray p-3' type="text" name="description" placeholder='제품 설명' value={product.description ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
+        <input className='border border-gray p-3' type="text" name="option" placeholder='옵션들(콤마(,)로 구분)' value={product.option ?? ''} onChange={e => handleChange(e.target.name, e.target.value)} required/>
         <button className='bg-main text-white p-3 font-bold text-lg' type='submit' disabled={disabled}>제품 등록하기</button>
       </form>
     </main>
