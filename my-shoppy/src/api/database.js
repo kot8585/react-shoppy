@@ -14,13 +14,12 @@ export function checkIsAdmin (user) {
     });
 }
 
-export async function getData(callback) {
+export async function getProducts() {
   return get(child(dbRef, `products/`)).then((snapshot) => {
     if (snapshot.exists()) {
-        callback(snapshot.val());
-      } else {
-        console.log("No data available");
-      }
+        return snapshot.val();
+      } 
+      return [];
     }).catch((error) => {
       console.error(error);
     });
