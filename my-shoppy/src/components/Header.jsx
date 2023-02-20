@@ -10,7 +10,7 @@ export default function Header() {
   const {user, login, logout} = useUserContext();
 
   return (
-    <header className='flex justify-between items-center border-b border-gray p-3 mb-2'>
+    <header className='flex justify-between items-center border-b border-grey p-3'>
       <Link to="/" className='flex items-center text-main gap-2 text-2xl'>
         <TbBuildingStore/>
         <span>Shoppy</span>
