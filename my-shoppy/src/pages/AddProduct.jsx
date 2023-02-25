@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { writeProductData } from '../api/database';
 import { uploadImage } from '../api/uploader';
 
-
-//TODO: product를 객채로 관리하는 방법은 없으려나? 
 export default function AddProduct() {
   const [disabled, setDisabled] = useState(false);
   const [completed, setCompleted] = useState(false);
@@ -24,8 +22,6 @@ export default function AddProduct() {
     });
   }
  
-
-
   const handleSubmit = async (e) => {
     try {
     setDisabled(true);
@@ -35,10 +31,7 @@ export default function AddProduct() {
       setDisabled(false);
       return;
     };
-    //3. ✅ 전부 다 체크됐을경우 cloudinary에 요청 보내기 
-    
     const data = await uploadImage(product.imageUrl);
-
     await writeProductData(product, data.url);
     setCompleted(true);
     window.alert('제품 업로드 완료');
