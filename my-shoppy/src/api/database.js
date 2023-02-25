@@ -35,3 +35,8 @@ export async function writeProductData(product, imageUrl) {
       option: product.option.split(',')
     });
 }
+
+export async function addCart(product, userId) {
+  const db = getDatabase();
+  return set(ref(db, `cart/${userId}/${product.id}`),product);
+}

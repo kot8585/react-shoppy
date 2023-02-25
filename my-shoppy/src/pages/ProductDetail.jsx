@@ -1,12 +1,35 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
+import { addCart } from '../api/database';
+import { useUserContext } from '../context/UserContext';
 
 export default function ProductDetail() {
   const {state: { id, name, description, category, imageUrl, option, price }} = useLocation();
-  const [selected, setSelected] = useState();
+  const {user} = useUserContext();
+
+  const [selected, setSelected] = useState(option && option[0]);
+  const [completed, setCompleted] = useState(false);
+  
   const handleChange = (e) => {
     setSelected(e.target.value);
   }
+
+  const handleClick = async () => {
+    //product만들기 
+    if(!user) {
+      alert('장바구니는 로그인을 해야 이용가능해요');
+      return;
+    }
+    const product = {id, name, description, category, imageUrl, option:selected, price}
+    //장바구니에 추가하기
+    await addCart(product, user.uid);
+    alert('장바구니에 추가되었어요');
+    setCompleted(true);
+    setTimeout(() => {
+      setCompleted(false);
+    }, "3000");
+  }
+
   return (
     <div className='px-7 py-5'>
       <p>{category}</p>
@@ -25,7 +48,11 @@ export default function ProductDetail() {
               ))}
             </select>
           </div>
-          <button className='bg-main text-white p-1'>장바구니에 추가</button>
+          <span className={completed? "visible" : "hidden"}>✅ 장바구니에 추가되었어요</span>
+          <button 
+            className='bg-main text-white p-1'
+            onClick={handleClick}
+            >장바구니에 추가</button>
         </div>
       </section>
     </div>
