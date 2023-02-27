@@ -6,13 +6,14 @@ import { UserContextProvider } from './context/UserContext';
 
 const queryClient = new QueryClient();
 export default function App() {
+  
   return (
-    <UserContextProvider>
-      <Header />
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
+      <UserContextProvider>
+        <Header />
         <Outlet />
-      </QueryClientProvider>
-    </UserContextProvider>
+      </UserContextProvider>
+    </QueryClientProvider>
   );
 }
 

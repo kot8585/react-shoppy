@@ -38,5 +38,17 @@ export async function writeProductData(product, imageUrl) {
 
 export async function addCart(product, userId) {
   const db = getDatabase();
-  return set(ref(db, `cart/${userId}/${product.id}`),product);
+  return set(ref(db, `carts/${userId}/${product.id}`),product);
+}
+
+export async function getCart(userId) {
+  return get(child(dbRef, `carts/${userId}`)).then((snapshot) => {
+    if (snapshot.exists()) {
+        const items = snapshot.val() || {};
+        return Object.values(items);
+      } 
+      return [];
+    }).catch((error) => {
+      console.error(error);
+    });
 }

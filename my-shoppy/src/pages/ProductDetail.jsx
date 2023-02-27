@@ -20,7 +20,7 @@ export default function ProductDetail() {
       alert('장바구니는 로그인을 해야 이용가능해요');
       return;
     }
-    const product = {id, name, description, category, imageUrl, option:selected, price}
+    const product = {id, name, description, category, imageUrl, size:selected, price, count:1}
     //장바구니에 추가하기
     await addCart(product, user.uid);
     alert('장바구니에 추가되었어요');
