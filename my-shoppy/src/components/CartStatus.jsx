@@ -2,17 +2,17 @@ import { useQuery } from '@tanstack/react-query';
 import React, { useState } from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { getCart } from '../api/database';
+import { useUserContext } from '../context/UserContext';
 
-export default function CartStatus({user}) {
-
+export default function CartStatus() {
+  const {user} = useUserContext();
   const [cartLength, setCartLength] = useState(0);
 
     // ❓캐시에 어떤게 저장되는거지? 리턴되는거?
-    const {data:carts} = useQuery(['carts'],
+    const {data:carts} = useQuery(['carts', user ? user.uid : ''],
     async () => {
       if(!user) return [];
       const carts = await getCart(user.uid);
-      console.log('길이', carts.length)
       setCartLength(carts.length);
       return carts;
     });
