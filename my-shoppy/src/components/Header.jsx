@@ -18,7 +18,7 @@ export default function Header() {
       </Link>
       <div className='flex items-center gap-3'>
         <Link to="products">Products</Link>
-        {<Link to="/cart"><CartStatus user={user}/></Link>}
+        {<Link to="/cart"><CartStatus /></Link>}
         {user && <User user={user}/>}
         {!user && <Button onClick={login} text="Login"/>}
         {user && <Button onClick={logout} text="Logout"/>}
