@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
 import { getCart } from '../api/database';
 import { useUserContext } from '../context/UserContext';

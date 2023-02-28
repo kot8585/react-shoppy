@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useLocation } from 'react-router-dom';
-import { addCart } from '../api/database';
+import { addOrUpdateCart } from '../api/database';
 import { useUserContext } from '../context/UserContext';
 
 export default function ProductDetail() {
@@ -22,7 +22,7 @@ export default function ProductDetail() {
     }
     const product = {id, name, description, category, imageUrl, size:selected, price, count:1}
     //장바구니에 추가하기
-    await addCart(product, user.uid);
+    await addOrUpdateCart(product, user.uid);
     alert('장바구니에 추가되었어요');
     setCompleted(true);
     setTimeout(() => {

@@ -37,7 +37,7 @@ export async function writeProductData(product, imageUrl) {
     });
 }
 
-export async function addCart(product, userId) {
+export async function addOrUpdateCart(product, userId) {
   return set(ref(db, `carts/${userId}/${product.id}`), product);
 }
 

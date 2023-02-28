@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiOutlinePlusSquare, AiOutlineMinusSquare } from 'react-icons/ai';
 import { FaTrashAlt } from 'react-icons/fa';
-import { addCart, removeFromCart } from '../api/database';
+import { addOrUpdateCart, removeFromCart } from '../api/database';
 
 export default function CartCard({
   uid,
@@ -10,14 +10,14 @@ export default function CartCard({
 }) {
 
   const onAdd = () => {
-    addCart({...cart, count: count+1}, uid);
+    addOrUpdateCart({...cart, count: count+1}, uid);
   }
 
   const onSub = () => {
     if(count <= 0){
       return;
     }
-    addCart({...cart, count: count-1}, uid);
+    addOrUpdateCart({...cart, count: count-1}, uid);
   }
 
   const handleDelete = () => {

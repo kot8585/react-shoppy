@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { getCart } from '../api/database';
 import { useUserContext } from '../context/UserContext';
 import { useQuery } from '@tanstack/react-query';
-// import CartCard from '../components/CartCard';
 import PriceCard from '../components/PriceCard';
-import CartCard from '../components/CartCard';
+import CartCard from '../components/CartItem';
 
 const shipPrice = 3000;
 
