@@ -10,7 +10,7 @@ import ErrorPage from './pages/ErrorPage';
 import Home from './pages/Home';
 import Products from './pages/Products';
 import ProductDetail from './pages/ProductDetail';
-import MyCart from './pages/MyCart';
+import Cart from './pages/Cart';
 import AddProduct from './pages/AddProduct';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -32,7 +32,7 @@ const router = createBrowserRouter([
       { path: "products/:productId", element: <ProductDetail />},
       { path: "cart", element: (
         <ProtectedRoute>
-        <MyCart />
+        <Cart />
         </ProtectedRoute>
         )},
     ]
