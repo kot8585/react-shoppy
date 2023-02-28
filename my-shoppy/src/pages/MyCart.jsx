@@ -1,18 +1,12 @@
 import React from 'react';
-import { getCart } from '../api/database';
-import { useUserContext } from '../context/UserContext';
-import { useQuery } from '@tanstack/react-query';
 import PriceCard from '../components/PriceCard';
-import CartCard from '../components/CartItem';
+import CartItem from '../components/CartItem';
+import useCart from '../hooks/useCart';
 
 const shipPrice = 3000;
 
 export default function Cart() {  
-  const {user} = useUserContext();
-
-  const {isLoading, error, data: carts} = useQuery(
-    ['carts', user ? user.uid : ''], 
-    () => getCart(user.uid));
+  const { getCart: {isLoading, error, data: carts}} = useCart();
 
   if(isLoading) return (<>Loading...</>);
   if (error) return (<>{error}</>);
@@ -32,9 +26,8 @@ export default function Cart() {
         <ul className='w-full'>
           {!hasCarts && <p>장바구니에 상품이 없어요</p>}
           {hasCarts && carts.map((cart) => 
-            <CartCard
+            <CartItem
               key={cart.id}
-              uid={user && user.uid} 
               cart={cart} 
               />
           )}

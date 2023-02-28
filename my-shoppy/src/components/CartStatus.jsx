@@ -1,18 +1,10 @@
-import { useQuery } from '@tanstack/react-query';
 import React from 'react';
 import { AiOutlineShoppingCart } from 'react-icons/ai';
-import { getCart } from '../api/database';
-import { useUserContext } from '../context/UserContext';
+import useCart from '../hooks/useCart';
 
 export default function CartStatus() {
-  const {user} = useUserContext();
 
-    // ❓캐시에 어떤게 저장되는거지? 리턴되는거?
-    const {data:carts} = useQuery(['carts', user ? user.uid : ''],
-    async () => {
-      if(!user) return [];
-      return getCart(user.uid);
-    });
+  const { getCart: {data: carts} } = useCart();
 
   return (
     <div className='relative w-8'>

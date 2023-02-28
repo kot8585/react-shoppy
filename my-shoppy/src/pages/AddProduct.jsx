@@ -1,22 +1,13 @@
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useEffect, useState } from 'react';
-import { writeProductData } from '../api/database';
 import { uploadImage } from '../api/uploader';
+import useProducts from '../hooks/useProducts';
 
+//🌟 CUSTOM HOOK 사용해서 USEQuery모으기!!!
 export default function AddProduct() {
   const [disabled, setDisabled] = useState(false);
   const [completed, setCompleted] = useState(false);
   const [product, setProduct] = useState({});
-
-  const queryClient = useQueryClient();
-  const mutation = useMutation({
-    mutationFn: ({product, url}) => {
-      return writeProductData(product, url);
-    }, 
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] })
-    },
-  });
+  const {addProduct} = useProducts();
 
   const handleChange = (name, value) => {
     setProduct((prev) => {
@@ -43,7 +34,7 @@ export default function AddProduct() {
       return;
     };
     const data = await uploadImage(product.imageUrl);
-    mutation.mutate({product, url:data.url});
+    addProduct.mutate({product, url:data.url});
     setCompleted(true);
     // window.alert('제품 업로드 완료');
   } catch (e){
