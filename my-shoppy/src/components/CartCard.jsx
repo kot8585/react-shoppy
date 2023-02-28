@@ -1,21 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { AiOutlinePlusSquare, AiOutlineMinusSquare } from 'react-icons/ai';
 import { FaTrashAlt } from 'react-icons/fa';
+import { addCart, removeFromCart } from '../api/database';
 
-export default function CartCard({cart: {id, imageUrl, name, category, price, size, count}, addTotalPrice, subTotalPrice}) {
-  const [countState, setCountState] = useState(count);
+export default function CartCard({
+  uid,
+  cart,
+  cart: {id, imageUrl, name, category, price, size, count}
+}) {
 
   const onAdd = () => {
-    setCountState(countState + 1);
-    addTotalPrice(parseInt(price));
+    addCart({...cart, count: count+1}, uid);
   }
 
   const onSub = () => {
-    if(countState <= 0){
+    if(count <= 0){
       return;
     }
-    setCountState(countState-1);
-    subTotalPrice(parseInt(price));
+    addCart({...cart, count: count-1}, uid);
+  }
+
+  const handleDelete = () => {
+    removeFromCart(uid, id);
   }
 
   return (
@@ -28,9 +34,12 @@ export default function CartCard({cart: {id, imageUrl, name, category, price, si
       </div>
       <div className='flex items-center gap-1'>
         <AiOutlinePlusSquare onClick={onAdd}/>
-        <span>{countState}</span>
+        <span>{count}</span>
         <AiOutlineMinusSquare onClick={onSub}/>
-        <FaTrashAlt className='ml-1 hover:text-main text-sm'/>
+        <FaTrashAlt 
+          className='ml-1 hover:text-main text-sm'
+          onClick={handleDelete}
+          />
       </div>
     </li>
   );

@@ -1,7 +1,9 @@
-import { getDatabase, ref, child, get, set } from "firebase/database";
+import { getDatabase, ref, child, get, set, remove } from "firebase/database";
 import {v4 as uuidv4} from 'uuid';
 
-const dbRef = ref(getDatabase());
+const db = getDatabase();
+const dbRef = ref(db);
+
 export function checkIsAdmin (user) {
   return get(child(dbRef, `admins/`)).then((snapshot) => {
     if (snapshot.exists()) {
@@ -27,7 +29,6 @@ export async function getProducts() {
 
 export async function writeProductData(product, imageUrl) {
   const id = uuidv4();
-  const db = getDatabase();
   return set(ref(db, 'products/'+id),{
     ...product, 
       imageUrl, 
@@ -37,8 +38,7 @@ export async function writeProductData(product, imageUrl) {
 }
 
 export async function addCart(product, userId) {
-  const db = getDatabase();
-  return set(ref(db, `carts/${userId}/${product.id}`),product);
+  return set(ref(db, `carts/${userId}/${product.id}`), product);
 }
 
 export async function getCart(userId) {
@@ -51,4 +51,8 @@ export async function getCart(userId) {
     }).catch((error) => {
       console.error(error);
     });
+}
+
+export async function removeFromCart(userId, productId) {
+  return remove(ref(db, `carts/${userId}/${productId}`));
 }

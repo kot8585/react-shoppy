@@ -10,38 +10,33 @@ const shipPrice = 3000;
 
 export default function Cart() {  
   const {user} = useUserContext();
-  const [totalPrice, setTotalPrice] = useState(0);
-  const addTotalPrice = (price) => {
-    setTotalPrice(totalPrice + price);
-  }
-  const subTotalPrice = (price) => {
-    setTotalPrice(totalPrice - price);
-  }
 
   const {isLoading, error, data: carts} = useQuery(
     ['carts', user ? user.uid : ''], 
-    async () => {
-      const carts = await getCart(user.uid);
-      let totalPrice;
-      if(!carts || carts.length === 0) return [];
-      totalPrice = carts.reduce((prev, curr) =>  prev + parseInt(curr.price), 0);
-      setTotalPrice(totalPrice);
-      return carts;
-     }) 
+    () => getCart(user.uid));
 
+  if(isLoading) return (<>Loading...</>);
+  if (error) return (<>{error}</>);
+
+  const hasCarts = carts && carts.length > 0;
+
+  const totalPrice = 
+    carts && 
+    carts.reduce(
+      (prev, curr) =>  prev + (parseInt(curr.price) * curr.count),
+       0
+    );
   return (
     <>
-      {isLoading && <>Loading...</>}
-      {error && <>{error}</>}
       <section className='flex flex-col items-center w-full pb-3 '>
         <h1 className='text-lg font-bold border-gray-200 border-b w-full text-center pb-2'>내 장바구니</h1>
         <ul className='w-full'>
-          {carts && carts.length> 0 && carts.map((cart) => 
+          {!hasCarts && <p>장바구니에 상품이 없어요</p>}
+          {hasCarts && carts.map((cart) => 
             <CartCard
-              key={cart.id} 
+              key={cart.id}
+              uid={user && user.uid} 
               cart={cart} 
-              addTotalPrice={addTotalPrice} 
-              subTotalPrice={subTotalPrice}
               />
           )}
         </ul>
