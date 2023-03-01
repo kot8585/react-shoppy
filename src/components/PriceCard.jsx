@@ -1,6 +1,6 @@
-import React from 'react';
+import React from "react";
 
-export default function PriceCard({text, price}) {
+export default function PriceCard({ text, price }) {
   return (
     <div>
       <p>{text}</p>
@@ -8,4 +8,3 @@ export default function PriceCard({text, price}) {
     </div>
   );
 }
-

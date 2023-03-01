@@ -1,40 +1,46 @@
-import { getDatabase, ref, child, get, set, remove } from "firebase/database";
-import {v4 as uuidv4} from 'uuid';
+import { getDatabase, ref, child, get, set, remove } from 'firebase/database';
+import { v4 as uuidv4 } from 'uuid';
 
 const db = getDatabase();
 const dbRef = ref(db);
 
-export function checkIsAdmin (user) {
-  return get(child(dbRef, `admins/`)).then((snapshot) => {
-    if (snapshot.exists()) {
+// TODO: 에러처리
+export function checkIsAdmin(user) {
+  return get(child(dbRef, 'admins/'))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
         return snapshot.val().includes(user.uid);
       } else {
-        console.log("No data available");
+        console.error('No data available');
+        return undefined;
       }
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.error(error);
     });
 }
 
 export async function getProducts() {
-  return get(child(dbRef, `products/`)).then((snapshot) => {
-    if (snapshot.exists()) {
+  return get(child(dbRef, 'products/'))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
         return snapshot.val();
-      } 
+      }
       return [];
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.error(error);
     });
 }
 
 export async function writeProductData(product, imageUrl) {
   const id = uuidv4();
-  return set(ref(db, 'products/'+id),{
-    ...product, 
-      imageUrl, 
-      id: id,
-      option: product.option.split(',')
-    });
+  return set(ref(db, `products/${id}`), {
+    ...product,
+    imageUrl,
+    id,
+    option: product.option.split(','),
+  });
 }
 
 export async function addOrUpdateCart(product, userId) {
@@ -42,13 +48,15 @@ export async function addOrUpdateCart(product, userId) {
 }
 
 export async function getCart(userId) {
-  return get(child(dbRef, `carts/${userId}`)).then((snapshot) => {
-    if (snapshot.exists()) {
+  return get(child(dbRef, `carts/${userId}`))
+    .then((snapshot) => {
+      if (snapshot.exists()) {
         const items = snapshot.val() || {};
         return Object.values(items);
-      } 
+      }
       return [];
-    }).catch((error) => {
+    })
+    .catch((error) => {
       console.error(error);
     });
 }
