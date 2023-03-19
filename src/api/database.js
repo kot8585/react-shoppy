@@ -1,17 +1,33 @@
-import { getDatabase, ref, child, get, set, remove } from 'firebase/database';
-import { v4 as uuidv4 } from 'uuid';
+import {
+  getDatabase,
+  ref,
+  child,
+  get,
+  set,
+  remove,
+  query,
+  orderByChild,
+  limitToFirst,
+  startAfter,
+  limit,
+  startAt,
+  limitToLast,
+  endAt,
+  endBefore,
+} from "firebase/database";
+import { v4 as uuidv4 } from "uuid";
 
 const db = getDatabase();
 const dbRef = ref(db);
 
 // TODO: 에러처리
 export function checkIsAdmin(user) {
-  return get(child(dbRef, 'admins/'))
+  return get(child(dbRef, "admins/"))
     .then((snapshot) => {
       if (snapshot.exists()) {
         return snapshot.val().includes(user.uid);
       } else {
-        console.error('No data available');
+        console.error("No data available");
         return undefined;
       }
     })
@@ -20,17 +36,42 @@ export function checkIsAdmin(user) {
     });
 }
 
-export async function getProducts() {
-  return get(child(dbRef, 'products/'))
-    .then((snapshot) => {
-      if (snapshot.exists()) {
-        return snapshot.val();
-      }
+const LIMIT = 2;
+export async function getProducts(pageParam = "") {
+  console.log("database: ", pageParam);
+  const result = [];
+  await get(
+    query(
+      ref(db, "products"),
+      orderByChild("createdAt"),
+      endBefore(pageParam ?? ""),
+      limitToLast(LIMIT)
+    )
+  ).then((snapshot) => {
+    if (snapshot.exists()) {
+      snapshot.forEach((child) => {
+        console.log(child.val());
+        result.unshift(child.val());
+      });
+    } else {
       return [];
-    })
-    .catch((error) => {
-      console.error(error);
-    });
+    }
+  });
+  if (result.length === LIMIT) {
+    return { data: result, nextCursor: result[LIMIT - 1].createdAt };
+  } else {
+    return { data: result };
+  }
+  // return get(child(dbRef, "products/"))
+  //   .then((snapshot) => {
+  //     if (snapshot.exists()) {
+  //       return snapshot.val();
+  //     }
+  //     return [];
+  //   })
+  //   .catch((error) => {
+  //     console.error(error);
+  //   });
 }
 
 export async function writeProductData(product, imageUrl) {
@@ -39,7 +80,8 @@ export async function writeProductData(product, imageUrl) {
     ...product,
     imageUrl,
     id,
-    option: product.option.split(','),
+    option: product.option.split(","),
+    createdAt: Date.now(),
   });
 }
 

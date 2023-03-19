@@ -1,16 +1,24 @@
-import React from 'react';
-import { TbBuildingStore } from 'react-icons/tb';
-import { Link } from 'react-router-dom';
-import User from './User';
-import { useUserContext } from '../context/UserContext';
-import Button from './ui/Button';
-import CartStatus from './CartStatus';
+import React, { useState } from "react";
+import { TbBuildingStore } from "react-icons/tb";
+import { Link } from "react-router-dom";
+import User from "./User";
+import { useUserContext } from "../context/UserContext";
+import Button from "./ui/Button";
+import CartStatus from "./CartStatus";
+import { FaBars } from "react-icons/fa";
 
 export default function Header() {
+  const [isOpen, setIsOpen] = useState(false);
   const { user, login, logout } = useUserContext();
+  const toggleSide = () => {
+    setIsOpen(true);
+  };
 
   return (
     <header className="flex justify-between items-center border-b border-grey p-3 w-full">
+      <button onClick={toggleSide}>
+        <FaBars />
+      </button>
       <Link to="/" className="flex items-center text-main gap-2 text-2xl">
         <TbBuildingStore />
         <span>Shoppy</span>

@@ -1,13 +1,13 @@
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   getProducts as fetchProducts,
   writeProductData,
-} from '../api/database';
+} from "../api/database";
 
 export default function useProducts() {
   const queryClient = useQueryClient();
 
-  const productsQuery = useQuery(['products'], fetchProducts, {
+  const productsQuery = useQuery(["products"], fetchProducts, {
     staleTime: 1000 * 60,
   });
 
@@ -16,7 +16,7 @@ export default function useProducts() {
       return writeProductData(product, url);
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['products'] });
+      queryClient.invalidateQueries({ queryKey: ["products"] });
     },
   });
 
