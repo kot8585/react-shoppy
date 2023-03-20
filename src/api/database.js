@@ -50,7 +50,6 @@ export async function getProducts(pageParam = "") {
   ).then((snapshot) => {
     if (snapshot.exists()) {
       snapshot.forEach((child) => {
-        console.log(child.val());
         result.unshift(child.val());
       });
     } else {
@@ -62,16 +61,6 @@ export async function getProducts(pageParam = "") {
   } else {
     return { data: result };
   }
-  // return get(child(dbRef, "products/"))
-  //   .then((snapshot) => {
-  //     if (snapshot.exists()) {
-  //       return snapshot.val();
-  //     }
-  //     return [];
-  //   })
-  //   .catch((error) => {
-  //     console.error(error);
-  //   });
 }
 
 export async function writeProductData(product, imageUrl) {
