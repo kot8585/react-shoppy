@@ -8,17 +8,10 @@ import CartStatus from "./CartStatus";
 import { FaBars } from "react-icons/fa";
 
 export default function Header() {
-  const [isOpen, setIsOpen] = useState(false);
   const { user, login, logout } = useUserContext();
-  const toggleSide = () => {
-    setIsOpen(true);
-  };
 
   return (
     <header className="flex justify-between items-center border-b border-grey p-3 w-full">
-      <button onClick={toggleSide}>
-        <FaBars />
-      </button>
       <Link to="/" className="flex items-center text-main gap-2 text-2xl">
         <TbBuildingStore />
         <span>Shoppy</span>
