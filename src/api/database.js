@@ -31,8 +31,7 @@ export function checkIsAdmin(user) {
     });
 }
 
-const LIMIT = 2;
-export async function getProducts(pageParam = "") {
+export async function getProducts(pageParam = "", limit=4) {
   console.log("database: ", pageParam);
   const result = [];
   await get(
@@ -40,7 +39,7 @@ export async function getProducts(pageParam = "") {
       ref(db, "products"),
       orderByChild("createdAt"),
       endBefore(pageParam ?? ""),
-      limitToLast(LIMIT)
+      limitToLast(limit)
     )
   ).then((snapshot) => {
     if (snapshot.exists()) {
@@ -51,8 +50,8 @@ export async function getProducts(pageParam = "") {
       return [];
     }
   });
-  if (result.length === LIMIT) {
-    return { data: result, nextCursor: result[LIMIT - 1].createdAt };
+  if (result.length === limit) {
+    return { data: result, nextCursor: result[limit - 1].createdAt };
   } else {
     return { data: result };
   }

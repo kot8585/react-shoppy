@@ -17,7 +17,7 @@ export default function ProductCard({
       key={id}
       onClick={handleClick}
     >
-      <img className="w-full" src={imageUrl} alt="상품 사진" />
+      <img className="w-full h-4/5" src={imageUrl} alt="상품 사진" />
       <div className="flex justify-between p-2 ">
         <div className="flex flex-col">
           <span>{name}</span>
