@@ -25,7 +25,7 @@ export default function CartCard({
 
   return (
     <li className="flex gap-3 items-center py-3" key={id}>
-      <img src={imageUrl} alt={name} className="h-32" />
+      <img src={imageUrl} alt={name} className="h-32 w-28" />
       <div className="flex flex-col flex-grow">
         <p>{name}</p>
         <p className="text-main">{size}</p>

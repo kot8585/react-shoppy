@@ -25,7 +25,7 @@ export default function Cart() {
           내 장바구니
         </h1>
         <ul className="w-full">
-          {!hasCarts && <p>장바구니에 상품이 없어요</p>}
+          {!hasCarts && <p className='p-3 text-center'>장바구니에 상품이 없어요</p>}
           {hasCarts &&
             carts.map((cart) => <CartItem key={cart.id} cart={cart} />)}
         </ul>
