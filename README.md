@@ -5,29 +5,22 @@
 https://sweet-kitten-602c44.netlify.app
 
 ## 기술 스택
+- React, ReactRouter, ReactQuery 
+- tailwindCSS, firebase
 
-## 프로젝트 상세
-- 상품 무한 스크롤 기능 (혼자서 추가한 기능)
-- 상품 상세 보기 
-- 로그인되어있을 시 장바구니에 상품 추가
-- 장바구니 조회
-- 관리자일 시 상품 추가 기능
-- 장바구니에 담긴 상품 개수 표시
-- 로그인 / 로그아웃
+## 구현한 기능
+- [ReactQuery의 infiniteQuery와 intersectionAPI, useRef를 활용해 상품 무한 스크롤 기능 구현 (강의 외의 추가 기능)](https://next-js-blog-ashen.vercel.app/posts/infinite-query)
+- firebase를 사용한 로그인/로그아웃
+- useMutation을 사용한 장바구니 추가 /  총액 계산 / ➕, ➖ 버튼으로 수량 조절 기능
+- React Router의 Protected Router를 통한 권한 검사
+- 상품 등록 / 전체 조회 / 상세 보기 기능
 
 ## 페이지 및 기능
-### Home
-[홈화면](/images/home.png)
+### 전체화면
+![화면 기록 2023-04-27 오전 11 55 58](https://user-images.githubusercontent.com/57999419/234748736-d7b7cfd4-2c69-4581-910b-ba23b0e10f04.gif)
 
-### 상품 상세정보 보기
-[상품 상세](/images/product.png)
-
-### 장바구니
-[장바구니](/images/carts.png)
 
 ### 상품 추가
+![화면 기록 2023-04-10 오후 7 13 50](https://user-images.githubusercontent.com/57999419/234746236-a78d3e74-6892-4a04-8f4e-574b6ff86824.gif)
 
-
-### 로그인 
-[로그인](/images/login.png)
 
