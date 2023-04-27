@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { TbBuildingStore } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import User from "./User";
 import { useUserContext } from "../context/UserContext";
 import Button from "./ui/Button";
 import CartStatus from "./CartStatus";
-import { FaBars } from "react-icons/fa";
 
 export default function Header() {
   const { user, login, logout } = useUserContext();
